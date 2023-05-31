@@ -41,7 +41,14 @@
         show-size
         :rules="[validate.maxLength(3), validate.maxFileSize(30_000, 10_000)]"
       />
-      <v-btn class="mt-9" color="primary" type="submit" :loading="isSubmitting">Submit</v-btn>
+      <v-btn 
+        class="mt-9" 
+        color="primary" 
+        type="submit"
+        prepend-icon="mdi:mdi-plus" 
+        :loading="isSubmitting">
+        Create ticket
+      </v-btn>
     </v-form>
   </o-page-container>
 </template>
