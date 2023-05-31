@@ -4,7 +4,7 @@
       v-model="user.name"
       class="mb-3"
       label="Contact"
-      hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      hint="Who is the contact person for this ticket?"
       append-icon="mdi:mdi-account"
       persistent-hint
       disabled
@@ -15,16 +15,16 @@
         class="mb-3"
         label="Title"
         append-icon="mdi:mdi-form-textbox"
-        hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        hint="Brief description of the incident"
         :rules="[validate.required, validate.minLength(5)]"
         persistent-hint
       />
       <v-textarea
-        v-model="formData.subject"
+        v-model="formData.description"
         class="mb-3"
-        label="Subject"
+        label="Description"
         append-icon="mdi:mdi-text"
-        hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        hint="Detailed explanation on the incident"
         :rules="[validate.required, validate.minLength(20)]"
         persistent-hint
       />
@@ -34,7 +34,7 @@
         class="mb-3"
         prepend-icon=""
         append-icon="mdi:mdi-paperclip"
-        hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        hint="Upload attachments (max 3 files, max 10mb/file, max 30mb in total)"
         persistent-hint
         multiple
         accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -76,16 +76,14 @@ async function onSubmit() {
       const fileUploadResults = await onifyApiRequest.uploadFiles({
         type: 'public',
         files: files.value,
-        ttl: 3000,
-        role: ['admin', 'manager'],
-        refresh: false,
-        tag: ['image', 'jpg'],
+        //ttl: 3000, # Time to live before deleted
+        tag: ['attachment', 'ticket'],
       });
       // Assign uploaded files to `formData.attachments`
       formData.attachments = fileUploadResults;
 
       // Submit the form. Sends a `POST` request to the API with the form data as payload
-      const response = await onifyApiRequest('my/workflows/run/create-ticket?timeout=60', { method: 'post', json: formData }).response();
+      const response = await onifyApiRequest('my/workflows/run/create-ticket', { method: 'post', json: formData }).response();
 
       // Submission attempt completed. Removes the loading effect on the button
       isSubmitting.value = false;
@@ -101,8 +99,8 @@ async function onSubmit() {
         // Show "Submission Successful" alert
         alerts.addAlert({
           type: 'success',
-          title: 'Ticket Submission Successful',
-          body: `Ticket number: ${createTicketResult.output.ticketNumber}`,
+          title: 'TICKET CREATED',
+          body: `Your ticket number is ${createTicketResult.output.ticketNumber}`,
         });
       }
     } catch (err) {
