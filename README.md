@@ -11,7 +11,7 @@
 ## Requirements
 
 * [Onify Hub](https://github.com/onify/install)
-* [Onify Helix App (custom)](https://github.com/onify/helix-app-boilerplate)
+* [Onify Helix](https://github.com/onify/helix-app-boilerplate) - You need to set up a new custom Helix App if you do not have it.
 
 ## Setup
 
