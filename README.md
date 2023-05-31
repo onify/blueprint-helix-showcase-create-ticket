@@ -4,28 +4,36 @@
 
 # Onify Blueprint: Helix Showcase - Create ticket
 
-....
+This Blueprint provides a example for creating a ticket using a form page that integrates with the Onify Hub to run a workflow. Alongside this, you'll find demonstrations on validating form fields and uploading files to the Onify Hub. This serves as a guide to harnessing the power of our new framework, **Onify Helix**. Enjoy and stay tuned for more!
 
-![Onify Blueprint: Helix Showcase - Create ticket](blueprint.jpg "Blueprint")
+![Onify Blueprint: Onify Helix Showcase - Create ticket](blueprint.jpg "Blueprint")
 
 ## Requirements
 
 * [Onify Hub](https://github.com/onify/install)
-* [Onify Helix](https://github.com/onify/helix-app-boilerplate) - Please contact support@onify.co to get access to Onify Helix
+* [Onify Helix](https://github.com/onify/helix-app-boilerplate)
 
 ## Setup
 
 ### Setup Workflow
 
-1. Copy `./hub/resources/flows/create-ticket.bpmn` to `./resources/flows` 
+1. Copy `./hub/resources/*` to Onify Hub resources folder `./resources/`  
 2. Sync resources with Git if needed
 3. Create a new Workflow with key `create-ticket` and set `bpmnresource` to `create-ticket.bpmn`
 
 ### Setup Create ticket form
 
-1. Copy ...
-2. Add to `pages.yml`
-...
+1. Copy `./helix/*` to your Onify Helix App root folder
+2. Add to `create-ticket` page to `pages.yml` (see example below)
+
+#### pages.yml
+
+```yml
+- name: create-ticket
+  title: 'Create Ticket'
+  path: /create-ticket
+  import: ../src/custom/pages/create-ticket.vue
+```
 
 ## Support
 
