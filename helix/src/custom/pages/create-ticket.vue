@@ -5,7 +5,7 @@
       class="mb-3"
       label="Contact"
       hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      prepend-icon="mdi:mdi-account"
+      append-icon="mdi:mdi-account"
       persistent-hint
       disabled
     />
@@ -14,7 +14,7 @@
         v-model="formData.title"
         class="mb-3"
         label="Title"
-        prepend-icon="mdi:mdi-form-textbox"
+        append-icon="mdi:mdi-form-textbox"
         hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
         :rules="[validate.required, validate.minLength(5)]"
         persistent-hint
@@ -23,7 +23,7 @@
         v-model="formData.subject"
         class="mb-3"
         label="Subject"
-        prepend-icon="mdi:mdi-text"
+        append-icon="mdi:mdi-text"
         hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
         :rules="[validate.required, validate.minLength(20)]"
         persistent-hint
@@ -32,6 +32,8 @@
         v-model="files"
         label="Attachments"
         class="mb-3"
+        prepend-icon=""
+        append-icon="mdi:mdi-paperclip"
         hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
         persistent-hint
         multiple
