@@ -1,55 +1,50 @@
 <template>
   <o-page-container type="form">
-    <v-text-field
-      v-model="user.name"
-      class="mb-3"
-      label="Contact"
-      hint="Who is the contact person for this ticket?"
-      append-icon="mdi:mdi-account"
-      persistent-hint
-      disabled
-    />
-    <v-form ref="vFormRef" validate-on="input" @submit.prevent="onSubmit">
+    <div style="width: 587px">
       <v-text-field
-        v-model="formData.title"
+        v-model="user.name"
         class="mb-3"
-        label="Title"
-        append-icon="mdi:mdi-form-textbox"
-        hint="Brief description of the incident"
-        :rules="[validate.required, validate.minLength(5)]"
+        label="Contact"
+        hint="Who is the contact person for this ticket?"
+        append-icon="mdi:mdi-account"
         persistent-hint
+        disabled
       />
-      <v-textarea
-        v-model="formData.description"
-        class="mb-3"
-        label="Description"
-        append-icon="mdi:mdi-text"
-        hint="Detailed explanation on the incident"
-        :rules="[validate.required, validate.minLength(20)]"
-        persistent-hint
-      />
-      <v-file-input
-        v-model="files"
-        label="Attachments"
-        class="mb-3"
-        prepend-icon=""
-        append-icon="mdi:mdi-paperclip"
-        hint="Upload attachments (max 3 files, max 10mb/file, max 30mb in total)"
-        persistent-hint
-        multiple
-        accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        show-size
-        :rules="[validate.maxLength(3), validate.maxFileSize(30_000, 10_000)]"
-      />
-      <v-btn 
-        class="mt-9" 
-        color="primary" 
-        type="submit"
-        prepend-icon="mdi:mdi-plus" 
-        :loading="isSubmitting">
-        Create ticket
-      </v-btn>
-    </v-form>
+      <v-form ref="vFormRef" validate-on="input" @submit.prevent="onSubmit">
+        <v-text-field
+          v-model="formData.title"
+          class="mb-3"
+          label="Title"
+          append-icon="mdi:mdi-form-textbox"
+          hint="Brief description of the incident"
+          :rules="[validate.required, validate.min([5])]"
+          persistent-hint
+        />
+        <v-textarea
+          v-model="formData.description"
+          class="mb-3"
+          label="Description"
+          append-icon="mdi:mdi-text"
+          hint="Detailed explanation on the incident"
+          :rules="[validate.required, validate.min([20])]"
+          persistent-hint
+        />
+        <v-file-input
+          v-model="files"
+          label="Attachments"
+          class="mb-3"
+          prepend-icon=""
+          append-icon="mdi:mdi-paperclip"
+          hint="Upload attachments (max 3 files, max 10mb/file, max 30mb in total)"
+          persistent-hint
+          multiple
+          accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          show-size
+          :rules="[validate.max([3]), validate.maxFileSize(30_000, 10_000)]"
+        />
+        <v-btn class="mt-9" color="primary" type="submit" prepend-icon="mdi:mdi-plus" :loading="isSubmitting">Create ticket</v-btn>
+      </v-form>
+    </div>
   </o-page-container>
 </template>
 
