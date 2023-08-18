@@ -1,5 +1,6 @@
 <template>
-  <o-page-container type="form">
+  <o-form-container>
+    <o-page-head title="Create Ticket"></o-page-head>
     <div style="width: 587px">
       <v-text-field
         v-model="user.name"
@@ -40,12 +41,12 @@
           multiple
           accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           show-size
-          :rules="[validate.max([3]), validate.maxFileSize(30_000, 10_000)]"
+          :rules="[validate.maxFileSize(30_000, 10_000)]"
         />
         <v-btn class="mt-9" color="primary" type="submit" prepend-icon="mdi:mdi-plus" :loading="isSubmitting">Create ticket</v-btn>
       </v-form>
     </div>
-  </o-page-container>
+  </o-form-container>
 </template>
 
 <script setup>
