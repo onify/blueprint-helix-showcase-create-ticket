@@ -1,9 +1,13 @@
 <template>
-  <o-form-container>
-    <o-page-head title="Create Ticket"></o-page-head>
-    <div style="width: 587px">
+  <h-form-container>
+    <h-page-head title="Create Ticket"></h-page-head>
+    <h-page-title>Create Ticket</h-page-title>
+    <h-page-description>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </h-page-description>
+    <div style="width: 600px">
       <v-text-field
-        v-model="user.name"
+        v-model="onifyUser.name"
         class="mb-3"
         label="Contact"
         hint="Who is the contact person for this ticket?"
@@ -18,7 +22,7 @@
           label="Title"
           append-icon="mdi:mdi-form-textbox"
           hint="Brief description of the incident"
-          :rules="[validate.required, validate.min([5])]"
+          :rules="[helixValidate.required, helixValidate.min([5])]"
           persistent-hint
         />
         <v-textarea
@@ -27,7 +31,7 @@
           label="Description"
           append-icon="mdi:mdi-text"
           hint="Detailed explanation on the incident"
-          :rules="[validate.required, validate.min([20])]"
+          :rules="[helixValidate.required, helixValidate.min([20])]"
           persistent-hint
         />
         <v-file-input
@@ -41,16 +45,17 @@
           multiple
           accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           show-size
-          :rules="[validate.maxFileSize(30_000, 10_000)]"
+          :rules="[helixValidate.maxFileSize(30_000, 10_000)]"
         />
         <v-btn class="mt-9" color="primary" type="submit" prepend-icon="mdi:mdi-plus" :loading="isSubmitting">Create ticket</v-btn>
       </v-form>
     </div>
-  </o-form-container>
+  </h-form-container>
 </template>
 
 <script setup>
-const { alerts, user, onifyApiRequest } = usePageCommon();
+const { helixAlerts, helixHttpRequest } = useHelixCommon();
+const { onifyUser } = useOnifyCommon();
 
 /*
   Vue Template refs: https://vuejs.org/guide/essentials/template-refs.html
@@ -76,7 +81,7 @@ async function onSubmit() {
       isSubmitting.value = true;
 
       // Upload files to Onify API
-      const fileUploadResults = await onifyApiRequest.uploadFiles({
+      const fileUploadResults = await helixHttpRequest.uploadFiles({
         type: 'public',
         files: files.value,
         //ttl: 3000, # Time to live before deleted
@@ -86,7 +91,7 @@ async function onSubmit() {
       formData.attachments = fileUploadResults;
 
       // Submit the form. Sends a `POST` request to the API with the form data as payload
-      const response = await onifyApiRequest('my/workflows/run/create-ticket', { method: 'post', json: formData }).response();
+      const response = await helixHttpRequest({ url: 'my/workflows/run/create-ticket', method: 'post', payload: formData }).response();
 
       // Submission attempt completed. Removes the loading effect on the button
       isSubmitting.value = false;
@@ -100,7 +105,7 @@ async function onSubmit() {
         const createTicketResult = await response.json();
 
         // Show "Submission Successful" alert
-        alerts.addAlert({
+        helixAlerts.addAlert({
           type: 'success',
           title: 'TICKET CREATED',
           body: `Your ticket number is ${createTicketResult.output.ticketNumber}`,
