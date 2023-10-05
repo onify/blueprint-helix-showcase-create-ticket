@@ -17,6 +17,7 @@
       />
       <v-form ref="vFormRef" validate-on="input" @submit.prevent="onSubmit">
         <v-text-field
+          id="title"
           v-model="formData.title"
           class="mb-3"
           label="Title"
@@ -26,6 +27,7 @@
           persistent-hint
         />
         <v-textarea
+          id="description"
           v-model="formData.description"
           class="mb-3"
           label="Description"
@@ -35,6 +37,7 @@
           persistent-hint
         />
         <v-file-input
+          id="files"
           v-model="files"
           label="Attachments"
           class="mb-3"
@@ -80,13 +83,25 @@ async function onSubmit() {
     try {
       isSubmitting.value = true;
 
-      // Upload files to Onify API
-      const fileUploadResults = await helixHttpRequest.uploadFiles({
-        type: 'public',
-        files: files.value,
-        //ttl: 3000, # Time to live before deleted
-        tag: ['attachment', 'ticket'],
-      });
+      // Load files
+      const loadedFiles = await loadFiles(files.value);
+
+      // Upload results
+      const fileUploadResults = await Promise.all(
+        loadedFiles.map(async ([fileName, fileContents]) =>
+          (
+            await helixHttpRequest({
+              url: `/files/public/${fileName}`,
+              body: fileContents,
+              method: 'post',
+              query: {
+                tag: ['attachment', 'ticket'],
+              },
+            }).response()
+          ).json(),
+        ),
+      );
+
       // Assign uploaded files to `formData.attachments`
       formData.attachments = fileUploadResults;
 

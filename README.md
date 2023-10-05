@@ -11,7 +11,8 @@ This Blueprint provides a example for creating a ticket using a form page that i
 ## Requirements
 
 * [Onify Hub](https://github.com/onify/install)
-* [Onify Helix](https://github.com/onify/helix-app-boilerplate)
+* [Onify Helix App](https://github.com/onify/helix-app-boilerplate)
+* Onify Helix Components ^0.20.14
 
 ## Setup
 
