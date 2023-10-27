@@ -7,7 +7,7 @@
     </h-page-description>
     <div style="width: 600px">
       <v-text-field
-        v-model="onifyUser.name"
+        v-model="oUser.name"
         class="mb-3"
         label="Contact"
         hint="Who is the contact person for this ticket?"
@@ -23,7 +23,7 @@
           label="Title"
           append-icon="mdi:mdi-form-textbox"
           hint="Brief description of the incident"
-          :rules="[helixValidate.required, helixValidate.min([5])]"
+          :rules="[hValidate.required, hValidate.min([5])]"
           persistent-hint
         />
         <v-textarea
@@ -33,7 +33,7 @@
           label="Description"
           append-icon="mdi:mdi-text"
           hint="Detailed explanation on the incident"
-          :rules="[helixValidate.required, helixValidate.min([20])]"
+          :rules="[hValidate.required, hValidate.min([20])]"
           persistent-hint
         />
         <v-file-input
@@ -48,7 +48,7 @@
           multiple
           accept="image/png, image/jpeg, .png, .jpg, .jpeg .doc, .docx, .xml,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           show-size
-          :rules="[helixValidate.maxFileSize(30_000, 10_000)]"
+          :rules="[hValidate.maxFileSize(30_000, 10_000)]"
         />
         <v-btn class="mt-9" color="primary" type="submit" prepend-icon="mdi:mdi-plus" :loading="isSubmitting">Create ticket</v-btn>
       </v-form>
@@ -57,8 +57,9 @@
 </template>
 
 <script setup>
-const { helixAlerts, helixHttpRequest } = useHelixCommon();
-const { onifyUser } = useOnifyCommon();
+const { hLoadFiles } = useHUtils();
+const { hAlerts, hHttpRequest } = useHCommon();
+const { oUser } = useOCommon();
 
 /*
   Vue Template refs: https://vuejs.org/guide/essentials/template-refs.html
@@ -84,13 +85,13 @@ async function onSubmit() {
       isSubmitting.value = true;
 
       // Load files
-      const loadedFiles = await loadFiles(files.value);
+      const loadedFiles = await hLoadFiles(files.value);
 
       // Upload results
       const fileUploadResults = await Promise.all(
         loadedFiles.map(async ([fileName, fileContents]) =>
           (
-            await helixHttpRequest({
+            await hHttpRequest({
               url: `/files/public/${fileName}`,
               body: fileContents,
               method: 'post',
@@ -106,7 +107,7 @@ async function onSubmit() {
       formData.attachments = fileUploadResults;
 
       // Submit the form. Sends a `POST` request to the API with the form data as payload
-      const response = await helixHttpRequest({ url: 'my/workflows/run/create-ticket', method: 'post', payload: formData }).response();
+      const response = await hHttpRequest({ url: 'my/workflows/run/create-ticket', method: 'post', payload: formData }).response();
 
       // Submission attempt completed. Removes the loading effect on the button
       isSubmitting.value = false;
@@ -120,7 +121,7 @@ async function onSubmit() {
         const createTicketResult = await response.json();
 
         // Show "Submission Successful" alert
-        helixAlerts.addAlert({
+        hAlerts.hAddAlert({
           type: 'success',
           title: 'TICKET CREATED',
           body: `Your ticket number is ${createTicketResult.output.ticketNumber}`,
