@@ -1,6 +1,5 @@
 <template>
-  <h-form-container>
-    <h-page-head title="Create Ticket"></h-page-head>
+  <h-form-container page-title="Create Ticket">
     <h-page-title>Create Ticket</h-page-title>
     <h-page-description>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
