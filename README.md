@@ -30,7 +30,6 @@ This Blueprint provides a example for creating a ticket using a form page that i
 
 ```yml
 - name: create-ticket
-  title: 'Create Ticket'
   path: /create-ticket
   import: ../src/custom/pages/create-ticket.vue
 ```
